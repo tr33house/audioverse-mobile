@@ -5,9 +5,9 @@ import configureStore from './src/reducers/configureStore'
 import createApp from './App'
 import createEventHandler from './src/utils/event-handler'
 
-const { store } = configureStore()
+const { store, persistor } = configureStore()
 
-AppRegistry.registerComponent('AudioVerse', () => createApp(store))
+AppRegistry.registerComponent('AudioVerse', () => createApp(store, persistor))
 if (Platform.OS === 'ios') {
   TrackPlayer.registerEventHandler(createEventHandler(store)) // ios event handler
 } else {

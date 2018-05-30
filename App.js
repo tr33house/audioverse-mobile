@@ -7,6 +7,7 @@
 import React, { PureComponent } from 'react'
 import { AppState } from 'react-native'
 import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
 
 import { setupPlayer, playbackUpdate } from './src/actions'
 // react-navigation no redux
@@ -35,16 +36,19 @@ class App extends PureComponent {
   render() {
     return (
       <Provider store={this.props.store}>
-        <AppNavigator />
+        <PersistGate loading={null} persistor={this.props.persistor}>
+          <AppNavigator />
+        </PersistGate>
       </Provider>
     )
   }
   
 }
 
-export default function(store) {
+export default function(store, persistor) {
   App.defaultProps = {
-    store: store
+    store,
+    persistor
   }
   return App
 }
