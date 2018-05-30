@@ -31,22 +31,24 @@ class Settings extends PureComponent {
 
     return (
       <View style={styles.container}>
-        <ListItem icon={{name: 'pocket'}} title={I18n.t('Login', {locale: language})} chevron />
-        <ListItem icon={{name: 'map-pin'}} title={I18n.t('Language', {locale: language})} subtitle={I18n.t('id', {locale: language})} chevron onPress={() => this.setModalVisible(true)} />
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.modalVisible}>
-          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <Picker
-              selectedValue={language}
-              style={{ width: 100, backgroundColor: '#CCCCCC' }}
-              onValueChange={(itemValue, itemIndex) => changeLanguage(itemValue)}>
-              {languageOptions}
-            </Picker>
-            <Text onPress={() => this.setModalVisible(false)}>{I18n.t('Cancel', {locale: language})}</Text>
-          </View>
-        </Modal>
+        <View>
+          <ListItem icon={{name: 'pocket'}} title={I18n.t('Login', {locale: language})} chevron />
+          <ListItem icon={{name: 'map-pin'}} title={I18n.t('Language', {locale: language})} subtitle={I18n.t('id', {locale: language})} chevron onPress={() => this.setModalVisible(true)} />
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={this.state.modalVisible}>
+            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+              <Picker
+                selectedValue={language}
+                style={{ width: 100, backgroundColor: '#CCCCCC' }}
+                onValueChange={(itemValue, itemIndex) => changeLanguage(itemValue)}>
+                {languageOptions}
+              </Picker>
+              <Text onPress={() => this.setModalVisible(false)}>{I18n.t('Cancel', {locale: language})}</Text>
+            </View>
+          </Modal>
+        </View>
         <MiniPlayer onPressMetaData={this.handlePressMetaData.bind(this)} />
       </View>
     )
@@ -56,7 +58,8 @@ class Settings extends PureComponent {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    justifyContent: 'space-between'
   }
 })
 
