@@ -16,8 +16,12 @@ const List = ({ renderItem, items, isFetching, onRefresh, onEndReached, selectIt
 
   const handleEndReached = () => {
     console.log('end reached!!')
-    nextPageUrl && typeof onEndReached === 'function' && onEndReached()
+    !onEndReachedCalledDuringMomentum && nextPageUrl && typeof onEndReached === 'function' && onEndReached()
   }
+
+  // issue with FlatList, onEndReached is triggered when there is few items
+  // https://github.com/facebook/react-native/issues/14015
+  let onEndReachedCalledDuringMomentum = true
 
   return (
     <FlatList
@@ -28,6 +32,7 @@ const List = ({ renderItem, items, isFetching, onRefresh, onEndReached, selectIt
       onRefresh={onRefresh}
       onEndReachedThreshold={0.1}
       onEndReached={handleEndReached}
+      onMomentumScrollBegin={() => { onEndReachedCalledDuringMomentum = false }}
     />
   )
 
