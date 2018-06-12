@@ -27,8 +27,9 @@ We'll be updating the App Stores with this new version as soon as we reach versi
 
 
 ## TODOs
-- [ ] Bible
+- [x] Bible
 - [ ] Download Queue
+- [ ] Offline support
 - [ ] My Lists
   - [ ] Favorites,
   - [ ] History,
