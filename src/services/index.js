@@ -19,10 +19,18 @@ async function callApi(endpoint, parse) {
   }
 }
 
-export const fetchRecordings = url => callApi(url, (json) => json.result.map(item => parseRecording(item.recordings)))
-export const fetchBooks = url => callApi(url, (json) => json.result.map(item => item.audiobooks))
-export const fetchPresenters = url => callApi(url, (json) => json.result.map(item => item.presenters))
-export const fetchConferences = url => callApi(url, (json) => json.result.map(item => item.conferences))
-export const fetchSponsors = url => callApi(url, (json) => json.result.map(item => item.sponsors))
-export const fetchSeries = url => callApi(url, (json) => json.result.map(item => item.series))
-export const fetchTopics = url => callApi(url, (json) => json.result.map(item => item.topics))
+export const fetchBibleBooks = url => callApi(url, json => {
+  let result = []
+  for (item in json.result) {
+    result.push(json.result[item])
+  }
+  return result
+})
+export const fetchBibleChapters = url => callApi(url, json => json.result)
+export const fetchRecordings = url => callApi(url, json => json.result.map(item => parseRecording(item.recordings)))
+export const fetchBooks = url => callApi(url, json => json.result.map(item => item.audiobooks))
+export const fetchPresenters = url => callApi(url, json => json.result.map(item => item.presenters))
+export const fetchConferences = url => callApi(url, json => json.result.map(item => item.conferences))
+export const fetchSponsors = url => callApi(url, json => json.result.map(item => item.sponsors))
+export const fetchSeries = url => callApi(url, json => json.result.map(item => item.series))
+export const fetchTopics = url => callApi(url, json => json.result.map(item => item.topics))

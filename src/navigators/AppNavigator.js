@@ -6,10 +6,14 @@ import { StackNavigator, TabNavigator, TabBarTop, DrawerNavigator } from 'react-
 import Icon from 'react-native-vector-icons/Feather'
 
 import I18n from '../../locales'
-import { getLanguage } from '../reducers/selectors'
+import { getLanguage, getBible } from '../reducers/selectors'
+import IconButton from '../components/IconButton'
 import CustomDrawerContent from '../containers/CustomDrawerContent'
 import Login from '../containers/Login'
 import Signup from '../containers/Signup'
+import BibleBooks from '../containers/BibleBooks'
+import BibleChapters from '../containers/BibleChapters'
+import BibleVerses from '../containers/BibleVerses'
 import NewRecordings from '../containers/NewRecordings'
 import TrendingRecordings from '../containers/TrendingRecordings'
 import FeaturedRecordings from '../containers/FeaturedRecordings'
@@ -30,7 +34,7 @@ import Topic from '../containers/Topic'
 import Settings from '../containers/Settings'
 import NowPlaying from '../containers/NowPlaying'
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   language: getLanguage(state)
 })
 
@@ -52,6 +56,15 @@ const DrawerLabel = connect(mapStateToProps)(
   )
 )
 
+const HeaderRightBibleVerses = connect(state => ({bible: getBible(state)}))(
+  ({ onPress, bible }) => (
+    <TouchableOpacity onPress={onPress} style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15}}>
+      <Text style={{color: '#FFFFFF'}}>{bible.book}</Text>
+      <Icon name="chevron-down" size={24} color="#FFFFFF" />
+    </TouchableOpacity>
+  )
+)
+
 const AuthStack = StackNavigator({
   Login: Login,
   Signup: Signup
@@ -59,7 +72,35 @@ const AuthStack = StackNavigator({
   headerMode: 'none'
 })
 
-const AppTab = TabNavigator({
+const generateScreen = () => () => (
+  <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    <Text></Text>
+  </View>
+)
+
+const Bible = TabNavigator({
+  Books: {screen: BibleBooks, navigationOptions: {tabBarLabel: ({ tintColor }) => <TabBarLabel tintColor={tintColor} title="books" />}},
+  Chapters: {screen: BibleChapters, navigationOptions: {tabBarLabel: ({ tintColor }) => <TabBarLabel tintColor={tintColor} title="chapter" />}}
+}, {
+  tabBarOptions: {
+    labelStyle: {
+      color: '#FFFFFF',
+      fontWeight: 'bold'
+    },
+    style: {
+      backgroundColor: '#E53935'
+    },
+    indicatorStyle: {
+      backgroundColor: '#FFFFFF'
+    }
+  },
+  tabBarComponent: TabBarTop,
+  tabBarPosition: 'top',
+  animationEnabled: true,
+  swipeEnabled: true,
+})
+
+const Presentations = TabNavigator({
   New: {screen: NewRecordings, navigationOptions: {tabBarLabel: ({ tintColor }) => <TabBarLabel tintColor={tintColor} title="new_presentations" />}},
   Trendings: {screen: TrendingRecordings, navigationOptions: {tabBarLabel: ({ tintColor }) => <TabBarLabel tintColor={tintColor} title="trending_presentations" />}},
   Featured: {screen: FeaturedRecordings, navigationOptions: {tabBarLabel: ({ tintColor }) => <TabBarLabel tintColor={tintColor} title="featured_presentations" />}}
@@ -82,23 +123,20 @@ const AppTab = TabNavigator({
   swipeEnabled: true,
 })
 
-
-const generateScreen = () => () => (
-  <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-    <Text></Text>
-  </View>
-)
-
 const screenNavigationOptions = (title, icon) => ({
   title: <HeaderTitle title={title} />,
   drawerLabel: ({ tintColor }) => <DrawerLabel tintColor={tintColor} title={title} />,
-  drawerIcon: ({ tintColor }) => <Icon name={icon} size={24} color={tintColor} />
+  drawerIcon: ({ tintColor }) => <Icon name={icon} size={24} color={tintColor} />,
+  headerRight: <IconButton onPress={() => {}} style={{paddingHorizontal: 15}} name="search" size={24} color="#FFFFFF" />
 })
 
 const AppDrawer = DrawerNavigator({
   MyLists: {screen: generateScreen(), navigationOptions: screenNavigationOptions('my_lists', 'list')},
-  Presentations: {screen: AppTab, navigationOptions: screenNavigationOptions('presentations', 'mic')},
-  Bible: {screen: generateScreen(), navigationOptions: screenNavigationOptions('bible', 'plus-square')},
+  Presentations: {screen: Presentations, navigationOptions: screenNavigationOptions('presentations', 'mic')},
+  BibleVerses: {screen: BibleVerses, navigationOptions: ({ navigation }) => ({
+    ...screenNavigationOptions('bible', 'plus-square'),
+    headerRight: <HeaderRightBibleVerses onPress={() => navigation.navigate('Bible')} />
+  })},
   Books: {screen: Books, navigationOptions: screenNavigationOptions('books', 'book')},
   Stories: {screen: Stories, navigationOptions: screenNavigationOptions('stories', 'radio')},
   Presenters: {screen: Presenters, navigationOptions: screenNavigationOptions('presenters', 'user')},
@@ -122,14 +160,14 @@ const AppDrawerStack = StackNavigator({
     headerStyle: { backgroundColor: '#E53935', elevation: 0 },
     headerTintColor: '#FFFFFF',
     gesturesEnabled: false,
-    headerLeft: <TouchableOpacity onPress={() => navigation.navigate('DrawerToggle')}><Icon name="menu" size={24} color="#FFFFFF" style={{paddingHorizontal: 15}} /></TouchableOpacity>,
-    headerRight: <TouchableOpacity onPress={() => {}}><Icon name="search" size={24} color="#FFFFFF" style={{paddingHorizontal: 15}} /></TouchableOpacity>
+    headerLeft: <IconButton onPress={() => navigation.navigate('DrawerToggle')} style={{paddingHorizontal: 15}} name="menu" size={24} color="#FFFFFF" />
   })
 })
 
 const AppStack = StackNavigator({
   Auth: AuthStack,
   App: AppDrawerStack,
+  Bible,
   Book,
   Story,
   Presenter,
@@ -147,8 +185,8 @@ const AppStack = StackNavigator({
 })
 
 const AppNavigator = StackNavigator({
-  AppStack: AppStack,
-  NowPlaying: NowPlaying
+  AppStack,
+  NowPlaying
 },{
   headerMode: 'none',
   mode: 'modal',

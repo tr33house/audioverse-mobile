@@ -19,6 +19,8 @@ function* rootSaga() {
     takeLatest(actions.REPLAY, player.replay),
     takeLatest(actions.FORWARD, player.forward),
     takeLatest(actions.SET_RATE, player.setRate),
+    takeLatest(actions.LOAD_BIBLE_BOOKS, api.loadBibleBooks),
+    takeLatest(actions.LOAD_BIBLE_CHAPTERS, api.loadBibleChapters),
     takeLatest(actions.LOAD_NEW_RECORDINGS, api.loadNewRecordings),
     takeLatest(actions.LOAD_TRENDING_RECORDINGS, api.loadTrendingRecordings),
     takeLatest(actions.LOAD_FEATURED_RECORDINGS, api.loadFeaturedRecordings),

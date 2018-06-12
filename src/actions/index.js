@@ -17,6 +17,10 @@ export const FORWARD = 'FORWARD'
 export const SET_RATE = 'SET_RATE'
 export const PLAYBACK_RATE = 'PLAYBACK_RATE'
 
+export const BIBLE_VERSION = 'BIBLE_VERSION'
+export const BIBLE_BOOK = 'BIBLE_BOOK'
+export const BIBLE_CHAPTER = 'BIBLE_CHAPTER'
+
 const REQUEST = 'REQUEST'
 const SUCCESS = 'SUCCESS'
 const REFRESH = 'REFRESH'
@@ -33,6 +37,8 @@ function action(type, payload = {}) {
   return {type, ...payload}
 }
 
+export const BIBLE_BOOKS = createRequestTypes('BIBLE_BOOKS')
+export const BIBLE_CHAPTERS = createRequestTypes('BIBLE_CHAPTERS')
 export const NEW_RECORDINGS = createRequestTypes('NEW_RECORDINGS')
 export const TRENDING_RECORDINGS = createRequestTypes('TRENDING_RECORDINGS')
 export const FEATURED_RECORDINGS = createRequestTypes('FEATURED_RECORDINGS')
@@ -51,6 +57,8 @@ export const SERIE = createRequestTypes('SERIE')
 export const TOPICS = createRequestTypes('TOPICS')
 export const TOPIC = createRequestTypes('TOPIC')
 
+export const LOAD_BIBLE_BOOKS = 'LOAD_BIBLE_BOOKS'
+export const LOAD_BIBLE_CHAPTERS = 'LOAD_BIBLE_CHAPTERS'
 export const LOAD_NEW_RECORDINGS = 'LOAD_NEW_RECORDINGS'
 export const LOAD_TRENDING_RECORDINGS = 'LOAD_TRENDING_RECORDINGS'
 export const LOAD_FEATURED_RECORDINGS = 'LOAD_FEATURED_RECORDINGS'
@@ -68,6 +76,20 @@ export const LOAD_SERIES = 'LOAD_SERIES'
 export const LOAD_SERIE = 'LOAD_SERIE'
 export const LOAD_TOPICS = 'LOAD_TOPICS'
 export const LOAD_TOPIC = 'LOAD_TOPIC'
+
+export const bibleBooks = {
+  request: id => action(BIBLE_BOOKS.REQUEST, {id}),
+  success: (id, response) => action(BIBLE_BOOKS.SUCCESS, {id, response}),
+  refresh: (id, response) => action(BIBLE_BOOKS.REFRESH, {id, response}),
+  failure: (id, error) => action(BIBLE_BOOKS.FAILURE, {id, error})
+}
+
+export const bibleChapters = {
+  request: id => action(BIBLE_CHAPTERS.REQUEST, {id}),
+  success: (id, response) => action(BIBLE_CHAPTERS.SUCCESS, {id, response}),
+  refresh: (id, response) => action(BIBLE_CHAPTERS.REFRESH, {id, response}),
+  failure: (id, error) => action(BIBLE_CHAPTERS.FAILURE, {id, error})
+}
 
 export const newRecordings = {
   request: id => action(NEW_RECORDINGS.REQUEST, {id}),
@@ -188,6 +210,8 @@ export const topic = {
   failure: (id, error) => action(TOPIC.FAILURE, {id, error})
 }
 
+export const loadBibleBooks = (loadMore, refresh) => action(LOAD_BIBLE_BOOKS, {loadMore, refresh})
+export const loadBibleChapters = (loadMore, refresh, testament, book) => action(LOAD_BIBLE_CHAPTERS, {loadMore, refresh, testament, book})
 export const loadNewRecordings = (loadMore, refresh) => action(LOAD_NEW_RECORDINGS, {loadMore, refresh})
 export const loadTrendingRecordings = (loadMore, refresh) => action(LOAD_TRENDING_RECORDINGS, {loadMore, refresh})
 export const loadFeaturedRecordings = (loadMore, refresh) => action(LOAD_FEATURED_RECORDINGS, {loadMore, refresh})
@@ -224,3 +248,7 @@ export const replay = () => action(REPLAY)
 export const forward = () => action(FORWARD)
 export const setRate = () => action(SET_RATE)
 export const playbackRate = rate => action(PLAYBACK_RATE, {rate})
+
+export const bibleVersion = version => action(BIBLE_VERSION, {version})
+export const bibleBook = (testament, book) => action(BIBLE_BOOK, {testament, book})
+export const bibleChapter = chapter => action(BIBLE_CHAPTER, {chapter})

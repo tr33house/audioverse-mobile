@@ -54,10 +54,59 @@ function playback(state = { rate: 1 }, action) {
   }
 }
 
+function bible(state = {
+  version: {
+    id: 'ENGESV2',
+    name: '2001 English Standard',
+    abbr: 'ESV'
+  },
+  testament: 'O',
+  book: 'Gen',
+  chapter: 1
+}, action) {
+  switch(action.type) {
+    case ActionTypes.BIBLE_VERSION:
+      return {
+        ...state,
+        version: action.version
+      }
+    case ActionTypes.BIBLE_BOOK:
+      return {
+        ...state,
+        testament: action.testament,
+        book: action.book
+      }
+    case ActionTypes.BIBLE_CHAPTER:
+      return {
+        ...state,
+        chapter: action.chapter
+      }
+    default:
+      return state
+  }
+}
+
 const rootReducer = combineReducers({
   // nav, // use this to use react-navigation with redux
   language,
   playback,
+  bible,
+  bibleBooks: paginate({
+    types: [
+      ActionTypes.BIBLE_BOOKS.REQUEST,
+      ActionTypes.BIBLE_BOOKS.SUCCESS,
+      ActionTypes.BIBLE_BOOKS.REFRESH,
+      ActionTypes.BIBLE_BOOKS.FAILURE
+    ]
+  }),
+  bibleChapters: paginate({
+    types: [
+      ActionTypes.BIBLE_CHAPTERS.REQUEST,
+      ActionTypes.BIBLE_CHAPTERS.SUCCESS,
+      ActionTypes.BIBLE_CHAPTERS.REFRESH,
+      ActionTypes.BIBLE_CHAPTERS.FAILURE
+    ]
+  }),
   newRecordings: paginate({
     types: [
       ActionTypes.NEW_RECORDINGS.REQUEST,

@@ -1,5 +1,16 @@
 export const getLanguage = state => state.language
 
+export const getCurrentTrack = state => state.playback.currentTrack
+export const getCurrentTrackId = state => state.playback.currentTrackId
+export const getRate = state => state.playback.rate
+export const getPlaybackState = state => state.playback.state
+export const getNav = state => state.nav
+
+export const getBible = state => state.bible
+export const getBibleBooks = state => state.bibleBooks.data
+export const getBibleBooksPagination = state => state.bibleBooks
+export const getBibleChapters = state => state.bibleChapters.data
+export const getBibleChaptersPagination = state => state.bibleChapters
 export const getNewRecordings = state => state.newRecordings.data
 export const getNewRecordingsPagination = state => state.newRecordings
 export const getTrendingRecordings = state => state.trendingRecordings.data
@@ -34,9 +45,3 @@ export const getTopics = state => state.topics.data
 export const getTopicsPagination = state => state.topics
 export const getTopic = state => state.topic.data
 export const getTopicPagination = state => state.topic
-
-export const getCurrentTrack = state => state.playback.currentTrack
-export const getCurrentTrackId = state => state.playback.currentTrackId
-export const getRate = state => state.playback.rate
-export const getPlaybackState = state => state.playback.state
-export const getNav = state => state.nav

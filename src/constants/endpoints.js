@@ -1,4 +1,6 @@
 export default {
+  audiobibles: 'audiobibles',
+  bibleCDN: 'https://audioverse.org/download/audiobible/',
   new: 'recordings',
   trending: 'recordings/popular',
   featured: 'recordings/featured',

@@ -31,6 +31,8 @@ function* fetchEntity(entity, apiFn, id, url, refresh) {
   }
 }
 
+const fetchBibleBooks = fetchEntity.bind(null, actions.bibleBooks, api.fetchBibleBooks)
+const fetchBibleChapters = fetchEntity.bind(null, actions.bibleChapters, api.fetchBibleChapters)
 const fetchNewRecordings = fetchEntity.bind(null, actions.newRecordings, api.fetchRecordings)
 const fetchTrendingRecordings = fetchEntity.bind(null, actions.trendingRecordings, api.fetchRecordings)
 const fetchFeaturedRecordings = fetchEntity.bind(null, actions.featuredRecordings, api.fetchRecordings)
@@ -66,13 +68,44 @@ function* fetchData(loadMore, refresh, pagination, fetchFn, url) {
 }
 
 /**
+ * Load Bible books
+ * @param {boolean} loadMore 
+ * @param {boolean} refresh
+ */
+export function* loadBibleBooks({ loadMore, refresh }) {
+  if (!loadMore && !refresh) {
+    yield put(actions.bibleBooks.refresh(null, {result: []}))
+  }
+  const pagination = yield select(selectors.getBibleBooks)
+  const { version } = yield select(selectors.getBible)
+  yield call(fetchData, loadMore, refresh, pagination, fetchBibleBooks, Endpoints.audiobibles + '/' + version.id)
+}
+
+/**
+ * Load Bible chapters
+ * @param {boolean} loadMore 
+ * @param {boolean} refresh
+ * @param {string}  testament
+ * @param {string}  book
+ */
+export function* loadBibleChapters({ loadMore, refresh, testament, book }) {
+  if (!loadMore && !refresh) {
+    yield put(actions.bibleChapters.refresh(null, {result: []}))
+  }
+  yield put (actions.bibleBook(testament, book))
+  const pagination = yield select(selectors.getBibleBooks)
+  const { version } = yield select(selectors.getBible)
+  const url = Endpoints.audiobibles + '/books/' + book + '?volume=' + version.id + '&testament=' + testament
+  yield call(fetchData, loadMore, refresh, pagination, fetchBibleChapters, url)
+}
+
+/**
  * Load new recordings
  * @param {boolean} loadMore 
  * @param {boolean} refresh
  */
 export function* loadNewRecordings({ loadMore, refresh }) {
   const pagination = yield select(selectors.getNewRecordingsPagination)
-  // const language = yield select(selectors.getLanguage)
   yield call(fetchData, loadMore, refresh, pagination, fetchNewRecordings, Endpoints.new)
 }
 
